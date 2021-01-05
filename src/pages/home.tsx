@@ -9,7 +9,7 @@ interface Point {
 const CANVAS_WIDTH = 500
 const CANVAS_HEIGHT = 500
 
-const h = (x: number, m: number, b: number) => m * x + b
+const h = (x: number, m: number, b: number) => b + m * x
 
 const cost = (points: Point[], m: number, b: number) => {
   const M = points.length
@@ -23,6 +23,23 @@ const cost = (points: Point[], m: number, b: number) => {
   }
 
   return sum / (2 * M)
+}
+
+const learn = (points: Point[], m: number, b: number) => {
+  const LEARNING_RATE = 0.00001
+  const M = points.length
+  let bSum = 0
+  let mSum = 0
+
+  for (const point of points) {
+    bSum += h(point.x, m, b) - point.y
+    mSum += (h(point.x, m, b) - point.y) * point.x
+  }
+
+  return {
+    m: m - (LEARNING_RATE / M) * mSum,
+    b: b - (LEARNING_RATE / M) * bSum
+  }
 }
 
 const Point: FC<{point: Point}> = ({point}) => {
@@ -52,11 +69,7 @@ export const Home = () => {
           <Rect
             width={CANVAS_WIDTH} height={CANVAS_HEIGHT} fill={'#ececec'}
             onClick={(e) => setPoints((points) => [...points, {x: e.evt.x, y: e.evt.y}])}/>
-        </Layer>
-        <Layer>
           {points.map((point, index) => <Point key={index} point={point}/>)}
-        </Layer>
-        <Layer>
           <FunctionLine m={m} b={b}/>
         </Layer>
       </Stage>
@@ -80,6 +93,15 @@ export const Home = () => {
             onChange={(event) => setB(Number(event.target.value))}
           />
         </label>
+      </div>
+      <div>
+        <button onClick={() => {
+          const {m: newM, b: newB} = learn(points, m, b)
+          setM(newM)
+          setB(newB)
+        }}>
+          Learn
+        </button>
       </div>
     </>
   )

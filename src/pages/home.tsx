@@ -26,7 +26,7 @@ const cost = (points: Point[], m: number, b: number) => {
 }
 
 const learn = (points: Point[], m: number, b: number) => {
-  const LEARNING_RATE = 0.00001
+  const LEARNING_RATE = 0.00002
   const M = points.length
   let bSum = 0
   let mSum = 0
@@ -38,7 +38,23 @@ const learn = (points: Point[], m: number, b: number) => {
 
   return {
     m: m - (LEARNING_RATE / M) * mSum,
-    b: b - (LEARNING_RATE / M) * bSum
+    b: b - (LEARNING_RATE * 10000 / M) * bSum
+  }
+}
+
+const gradientDescent = (points: Point[], m: number, b: number) => {
+  let endM = m
+  let endB = b
+
+  for (let i = 0; i < 10000; i++) {
+    const {m: newM, b: newB} = learn(points, endM, endB)
+    endM = newM
+    endB = newB
+  }
+
+  return {
+    m: endM,
+    b: endB
   }
 }
 
@@ -96,7 +112,7 @@ export const Home = () => {
       </div>
       <div>
         <button onClick={() => {
-          const {m: newM, b: newB} = learn(points, m, b)
+          const {m: newM, b: newB} = gradientDescent(points, m, b)
           setM(newM)
           setB(newB)
         }}>

@@ -23,3 +23,4 @@ npm run dev
 
 - https://www.robinwieruch.de/linear-regression-gradient-descent-javascript
 - https://github.com/javascript-machine-learning/linear-regression-gradient-descent
+- https://www.mathopenref.com/linearexplorermxb.html

@@ -26,7 +26,7 @@ const cost = (points: Point[], m: number, b: number) => {
 }
 
 const learn = (points: Point[], m: number, b: number) => {
-  const LEARNING_RATE = 0.00002
+  const LEARNING_RATE = 0.0002
   const M = points.length
   let bSum = 0
   let mSum = 0
@@ -37,8 +37,8 @@ const learn = (points: Point[], m: number, b: number) => {
   }
 
   return {
-    m: m - (LEARNING_RATE / M) * mSum,
-    b: b - (LEARNING_RATE * 10000 / M) * bSum
+    m: m - (LEARNING_RATE / M * 0.1) * mSum,
+    b: b - (LEARNING_RATE / M * 0.1) * bSum
   }
 }
 
